@@ -70,6 +70,7 @@ app.listen(3000, () => {
 const checkIfRequestCanBeProcessUsingLocks = async (UserId: any) => {
     try {
         let Lockey = `lock:rate_limit:${UserId}`;
+
         let DataKey = `rate_limit:${UserId}`;
         let LockValue = uuidv4();
 
@@ -119,6 +120,7 @@ const accquireLock = async (lockKey: string, lockValue: string) => {
     try {
         let result = await redis.set(lockKey, lockValue, "NX", "PX", 1000); /// NX is if key doesn't exists then add it.
         ///  PX is keep the key only for 100ms after that expire it. 
+        ///  If the Key Already exists then redis will reject it.
 
         return result === "OK"
     }
